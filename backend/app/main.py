@@ -4,6 +4,7 @@ from contextlib import asynccontextmanager
 from app.core.config import settings
 from app.core.database import init_db
 from app.api import auth, settings as settings_api
+from app.api import visitors, visits, hosts, blacklist
 
 @asynccontextmanager
 async def lifespan(a):
@@ -14,6 +15,10 @@ app = FastAPI(title="GatePass API", lifespan=lifespan)
 app.add_middleware(CORSMiddleware, allow_origins=settings.CORS_ORIGINS, allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 app.include_router(auth.router)
 app.include_router(settings_api.router)
+app.include_router(visitors.router)
+app.include_router(visits.router)
+app.include_router(hosts.router)
+app.include_router(blacklist.router)
 
 @app.get("/api/health")
 async def health():
